@@ -15,18 +15,18 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Skiltinfo - Kjoretoyinformasjon for norske kjoretoy",
+    default: "Skiltinfo - Kjøretøyinformasjon for norske kjøretøy",
     template: "%s",
   },
   description:
-    "Sok opp detaljert kjoretoyinformasjon med registreringsnummer. Tekniske data, motor, vekt, EU-kontroll, utslipp og mer fra Statens vegvesen.",
+    "Søk opp detaljert kjøretøyinformasjon med registreringsnummer. Tekniske data, motor, vekt, EU-kontroll, utslipp og mer fra Statens vegvesen.",
   keywords: [
-    "kjoretoyoppslag",
+    "kjøretøyoppslag",
     "registreringsnummer",
     "biloppslag",
     "vegvesen",
     "EU-kontroll",
-    "kjoretoydata",
+    "kjøretøydata",
     "bilinfo",
     "norske biler",
     "skiltinfo",
@@ -35,15 +35,15 @@ export const metadata: Metadata = {
     type: "website",
     locale: "nb_NO",
     siteName: "Skiltinfo",
-    title: "Skiltinfo - Kjoretoyinformasjon for norske kjoretoy",
+    title: "Skiltinfo - Kjøretøyinformasjon for norske kjøretøy",
     description:
-      "Sok opp detaljert kjoretoyinformasjon med registreringsnummer. Tekniske data, motor, vekt, EU-kontroll, utslipp og mer.",
+      "Søk opp detaljert kjøretøyinformasjon med registreringsnummer. Tekniske data, motor, vekt, EU-kontroll, utslipp og mer.",
   },
   twitter: {
     card: "summary",
-    title: "Skiltinfo - Kjoretoyinformasjon for norske kjoretoy",
+    title: "Skiltinfo - Kjøretøyinformasjon for norske kjøretøy",
     description:
-      "Sok opp detaljert kjoretoyinformasjon med registreringsnummer.",
+      "Søk opp detaljert kjøretøyinformasjon med registreringsnummer.",
   },
   robots: {
     index: true,

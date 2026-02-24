@@ -44,10 +44,10 @@ export default function Home() {
               {/* Title */}
               <div className="text-center mb-8">
                 <p className="font-mono text-sm text-slate-500 mb-1">
-                  Sok opp kjoretoyinformasjon
+                  Søk opp kjøretøyinformasjon
                 </p>
                 <p className="font-mono text-xs text-slate-400">
-                  Skriv inn registreringsnummer for a starte
+                  Skriv inn registreringsnummer for å starte
                 </p>
               </div>
 
@@ -82,7 +82,7 @@ export default function Home() {
                   type="submit"
                   className="w-full bg-slate-800 text-white font-mono text-sm font-bold uppercase tracking-wider py-3 rounded-sm hover:bg-slate-700 active:bg-slate-900 transition-colors"
                 >
-                  Sok
+                  Søk
                 </button>
               </form>
 
@@ -90,8 +90,8 @@ export default function Home() {
               <div className="border-t-2 border-dashed border-slate-300 mt-8 pt-6">
                 <div className="grid grid-cols-3 gap-3 text-center">
                   {[
-                    { label: "Teknisk info", desc: "Motor, vekt, maal" },
-                    { label: "Miljodata", desc: "Utslipp, forbruk" },
+                    { label: "Teknisk info", desc: "Motor, vekt, mål" },
+                    { label: "Miljødata", desc: "Utslipp, forbruk" },
                     { label: "EU-kontroll", desc: "Frist, status" },
                   ].map((item) => (
                     <div key={item.label}>

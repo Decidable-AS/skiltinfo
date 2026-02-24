@@ -9,10 +9,10 @@ export default function NotFound() {
           <div className="bg-slate-800 text-white px-6 py-4 font-mono">
             <div className="flex items-center justify-between">
               <Link href="/" className="text-sm font-bold text-white hover:text-slate-300 transition-colors tracking-wider uppercase">
-                Nytt sok
+                Nytt søk
               </Link>
               <div className="text-lg font-bold tracking-wider">SKILTINFO</div>
-              <div className="text-xs invisible">Nytt sok</div>
+              <div className="text-xs invisible">Nytt søk</div>
             </div>
           </div>
 
@@ -26,18 +26,18 @@ export default function NotFound() {
             </div>
 
             <h1 className="font-mono text-lg font-bold text-slate-800 uppercase mb-2">
-              Kjoretoy ikke funnet
+              Kjøretøy ikke funnet
             </h1>
             <p className="font-mono text-sm text-slate-500 mb-8">
-              Vi fant ingen kjoretoy med dette registreringsnummeret.
-              Sjekk at du har skrevet riktig og prov igjen.
+              Vi fant ingen kjøretøy med dette registreringsnummeret.
+              Sjekk at du har skrevet riktig og prøv igjen.
             </p>
 
             <Link
               href="/"
               className="inline-block bg-slate-800 text-white font-mono text-sm font-bold uppercase tracking-wider px-6 py-3 rounded-sm hover:bg-slate-700 transition-colors"
             >
-              Nytt sok
+              Nytt søk
             </Link>
           </div>
 

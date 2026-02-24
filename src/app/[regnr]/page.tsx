@@ -18,8 +18,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!vehicle) {
     return {
-      title: `${plate} - Kjoretoy ikke funnet`,
-      description: `Ingen kjoretoy funnet med registreringsnummer ${plate}.`,
+      title: `${plate} - Kjøretøy ikke funnet`,
+      description: `Ingen kjøretøy funnet med registreringsnummer ${plate}.`,
       robots: { index: false, follow: false },
     };
   }
@@ -104,10 +104,10 @@ export default async function VehiclePage({ params }: PageProps) {
             <div className="bg-slate-800 text-white px-6 py-4 font-mono">
               <div className="flex items-center justify-between">
                 <Link href="/" className="text-sm font-bold text-white hover:text-slate-300 transition-colors tracking-wider uppercase">
-                  Nytt sok
+                  Nytt søk
                 </Link>
                 <div className="text-lg font-bold tracking-wider">SKILTINFO</div>
-                <div className="text-xs invisible">Nytt sok</div>
+                <div className="text-xs invisible">Nytt søk</div>
               </div>
             </div>
 
@@ -169,8 +169,8 @@ export default async function VehiclePage({ params }: PageProps) {
                 <DotRow label="Registreringsnr" value={v.plate} />
                 <DotRow label="Understellsnr" value={v.understellsnummer} />
                 <DotRow label="1. gang Norge" value={v.forstegangsregistrert} />
-                <DotRow label="Pa eier" value={v.registrertPaEier} />
-                <DotRow label="Kjoringens art" value={v.kjoringensArt} />
+                <DotRow label="På eier" value={v.registrertPaEier} />
+                <DotRow label="Kjøringens art" value={v.kjoringensArt} />
                 <DotRow label="Klasse" value={v.kjoretoyklasse} />
                 <DotRow label="Typegodkj." value={v.typegodkjenning} />
               </FormSection>
@@ -188,12 +188,12 @@ export default async function VehiclePage({ params }: PageProps) {
               <FormSection num="03" title="Karosseri">
                 <DotRow label="Type" value={v.karosseritype} />
                 <DotRow label="Farge" value={v.farge} />
-                <DotRow label="Dorer" value={v.antallDorer} />
+                <DotRow label="Dører" value={v.antallDorer} />
                 <DotRow label="Seter foran" value={v.sitteplasserForan} />
                 <DotRow label="Seter totalt" value={v.sitteplasserTotalt} />
                 <DotRow label="Lengde" value={v.lengde} />
                 <DotRow label="Bredde" value={v.bredde} />
-                <DotRow label="Hoyde" value={v.hoyde} />
+                <DotRow label="Høyde" value={v.hoyde} />
               </FormSection>
 
               <FormSection num="04" title="Vekter">
@@ -206,7 +206,7 @@ export default async function VehiclePage({ params }: PageProps) {
                 <DotRow label="Vogntog" value={v.tillattVogntogvekt} />
               </FormSection>
 
-              <FormSection num="05" title="Miljo og utslipp">
+              <FormSection num="05" title="Miljø og utslipp">
                 <DotRow label="Euroklasse" value={v.euroKlasse} />
                 <DotRow label="CO2 blandet" value={v.co2Blandet} />
                 <DotRow label="Forbruk blandet" value={v.forbrukBlandet} />
@@ -260,7 +260,7 @@ export default async function VehiclePage({ params }: PageProps) {
                 href="/"
                 className="block w-full text-center bg-slate-800 text-white font-mono text-sm font-bold uppercase tracking-wider px-6 py-3 rounded-sm hover:bg-slate-700 transition-colors"
               >
-                Nytt sok
+                Nytt søk
               </Link>
               <div className="mt-3 text-center font-mono text-[10px] text-slate-400 uppercase tracking-wider">
                 Data fra Statens vegvesen &bull; Skiltinfo er uavhengig
