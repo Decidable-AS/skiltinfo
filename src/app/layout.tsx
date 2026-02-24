@@ -62,6 +62,17 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+        <footer className="py-4 text-center font-mono text-[11px] text-slate-400">
+          Laget av{" "}
+          <a
+            href="https://decidable.no"
+            className="underline hover:text-slate-600 transition-colors"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Decidable AS
+          </a>
+        </footer>
         <Script
           src="https://umami.decidable.no/script.js"
           data-website-id="3c0cf6e7-8a24-4c6f-992a-696aad24e70a"
