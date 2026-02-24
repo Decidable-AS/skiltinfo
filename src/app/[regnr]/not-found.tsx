@@ -6,12 +6,13 @@ export default function NotFound() {
       <div className="max-w-lg w-full mx-4">
         <div className="bg-white rounded shadow-lg shadow-slate-300/40 border border-slate-200 overflow-hidden">
           {/* Header strip */}
-          <div className="bg-slate-800 text-white px-6 py-4 font-mono relative">
-            <Link href="/" className="absolute left-4 top-1/2 -translate-y-1/2 text-[11px] text-slate-400 hover:text-white transition-colors tracking-wider">
-              &larr; SOK
-            </Link>
-            <div className="text-center">
+          <div className="bg-slate-800 text-white px-6 py-4 font-mono">
+            <div className="flex items-center justify-between">
+              <Link href="/" className="text-sm font-bold text-white hover:text-slate-300 transition-colors tracking-wider uppercase">
+                Nytt sok
+              </Link>
               <div className="text-lg font-bold tracking-wider">SKILTINFO</div>
+              <div className="text-xs invisible">Nytt sok</div>
             </div>
           </div>
 
