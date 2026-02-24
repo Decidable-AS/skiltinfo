@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -61,6 +62,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+        <Script
+          src="https://umami.decidable.no/script.js"
+          data-website-id="3c0cf6e7-8a24-4c6f-992a-696aad24e70a"
+          strategy="lazyOnload"
+        />
       </body>
     </html>
   );
