@@ -1,3 +1,7 @@
+export function getBaseUrl(): string {
+  return process.env.COOLIFY_URL?.split(",")[0] ?? "http://localhost:3000";
+}
+
 export function formatDate(dateStr?: string): string {
   if (!dateStr) return "Ukjent";
   try {

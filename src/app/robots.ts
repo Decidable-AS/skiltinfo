@@ -1,7 +1,5 @@
 import type { MetadataRoute } from "next";
-
-const baseUrl =
-  process.env.COOLIFY_URL?.split(",")[0] ?? "http://localhost:3000";
+import { getBaseUrl } from "@/lib/utils";
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -11,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
       },
     ],
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: `${getBaseUrl()}/sitemap.xml`,
   };
 }

@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getVehicleView } from "@/lib/vehicle";
-import { formatPlate } from "@/lib/utils";
+import { formatPlate, getBaseUrl } from "@/lib/utils";
 import { fetchVehicle } from "@/lib/api";
 
 interface PageProps {
@@ -12,12 +12,15 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { regnr } = await params;
   const plate = formatPlate(regnr.toUpperCase());
+  const baseUrl = getBaseUrl();
+  const canonical = `${baseUrl}/${regnr.toUpperCase()}`;
   const vehicle = await fetchVehicle(regnr);
 
   if (!vehicle) {
     return {
-      title: `${plate} - Kjoretoy ikke funnet | Skiltinfo`,
+      title: `${plate} - Kjoretoy ikke funnet`,
       description: `Ingen kjoretoy funnet med registreringsnummer ${plate}.`,
+      robots: { index: false, follow: false },
     };
   }
 
@@ -31,9 +34,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
-    openGraph: { title, description, type: "website", siteName: "Skiltinfo" },
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      siteName: "Skiltinfo",
+      url: canonical,
+    },
     twitter: { card: "summary", title, description },
-    alternates: { canonical: `/${regnr.toUpperCase()}` },
+    alternates: { canonical },
   };
 }
 
