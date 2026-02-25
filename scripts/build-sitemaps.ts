@@ -53,6 +53,8 @@ const INDEX_PATH = resolve(ROOT, "public/sitemap.xml");
 const MAX_URLS_PER_SITEMAP = 50_000;
 const CONCURRENCY = 10;
 const DELAY_MS = 30;
+const URL_CHANGEFREQ = "daily";
+const URL_PRIORITY = "0.8";
 
 // ── Types ──────────────────────────────────────────────────────────────
 
@@ -137,7 +139,7 @@ function writeSitemapChunk(filepath: string, urls: string[]) {
   let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
   xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
   for (const url of urls) {
-    xml += `<url><loc>${url}</loc></url>\n`;
+    xml += `<url><loc>${url}</loc><changefreq>${URL_CHANGEFREQ}</changefreq><priority>${URL_PRIORITY}</priority></url>\n`;
   }
   xml += "</urlset>\n";
   writeFileSync(filepath, xml);
