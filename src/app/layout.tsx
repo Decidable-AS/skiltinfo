@@ -62,16 +62,42 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
-        <footer className="py-4 text-center font-mono text-[11px] text-slate-400">
-          Laget av{" "}
-          <a
-            href="https://decidable.no"
-            className="underline hover:text-slate-600 transition-colors"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Decidable AS
-          </a>
+        <footer className="py-6 text-center font-mono text-[11px] text-slate-400">
+          <div className="mb-3">
+            <span className="uppercase tracking-wider text-slate-500 font-semibold">
+              Andre tjenester
+            </span>
+            <div className="mt-1.5 flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-3">
+              <a
+                href="https://oljelandet.no"
+                className="underline hover:text-slate-600 transition-colors"
+                target="_blank"
+                rel="noopener"
+              >
+                Oljelandet (Bedriftsinformasjon)
+              </a>
+              <span className="hidden sm:inline">&bull;</span>
+              <a
+                href="https://telenummer.no"
+                className="underline hover:text-slate-600 transition-colors"
+                target="_blank"
+                rel="noopener"
+              >
+                Telenummer (Nummeropplysning)
+              </a>
+            </div>
+          </div>
+          <div>
+            Laget av{" "}
+            <a
+              href="https://decidable.no"
+              className="underline hover:text-slate-600 transition-colors"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Decidable AS
+            </a>
+          </div>
         </footer>
         <Script
           src="https://umami.decidable.no/script.js"
