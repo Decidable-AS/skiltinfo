@@ -19,13 +19,16 @@ const vehicleCache = new Map<string, CacheEntry>();
 const inFlightRequests = new Map<string, Promise<KjoretoyData | null>>();
 
 function logVegvesenEvent(event: string, details: Record<string, unknown>) {
+  const parts = Object.entries(details).map(([key, value]) => {
+    if (value === null || value === undefined || value === "") {
+      return `${key}=none`;
+    }
+
+    return `${key}=${String(value).replace(/\s+/g, " ").trim()}`;
+  });
+
   console.error(
-    "[vegvesen-api]",
-    JSON.stringify({
-      event,
-      timestamp: new Date().toISOString(),
-      ...details,
-    })
+    `[vegvesen-api] ${new Date().toISOString()} event=${event} ${parts.join(" ")}`,
   );
 }
 
