@@ -9,6 +9,10 @@ const CACHE_TTL_MS = 5 * 60_000;
 const NULL_CACHE_TTL_MS = 60_000;
 const SVV_LIMIT = 60;
 const SVV_WINDOW_MS = 60_000;
+const SVV_API_KEYS = (process.env.SVV_API_KEY ?? "")
+  .split(",")
+  .map((key) => key.trim())
+  .filter(Boolean);
 
 type CacheEntry = {
   data: KjoretoyData | null;
@@ -107,45 +111,61 @@ async function fetchVehicleUncached(
   }
 
   const request = (async () => {
+    if (SVV_API_KEYS.length === 0) {
+      throw new Error("SVV_API_KEY is not configured");
+    }
+
     const url = `${API_BASE}?kjennemerke=${cleaned}`;
-    const res = await fetch(url, {
-      headers: {
-        "SVV-Authorization": `Apikey ${process.env.SVV_API_KEY}`,
-      },
-      cache: "no-store",
-    });
-
-    if (res.status === 204 || res.status === 404) {
-      writeVehicleCache(cleaned, null);
-      return null;
-    }
-
-    if (!res.ok) {
-      const bodyPreview = await readErrorResponse(res);
-      logVegvesenEvent("upstream_request_failed", {
-        regnr: cleaned,
-        url,
-        status: res.status,
-        statusText: res.statusText,
-        retryAfter: res.headers.get("retry-after"),
-        requestId: res.headers.get("x-request-id") ?? res.headers.get("traceparent"),
-        contentType: res.headers.get("content-type"),
-        durationMs: Date.now() - startedAt,
-        bodyPreview,
+    for (let index = 0; index < SVV_API_KEYS.length; index++) {
+      const apiKey = SVV_API_KEYS[index];
+      const res = await fetch(url, {
+        headers: {
+          "SVV-Authorization": `Apikey ${apiKey}`,
+        },
+        cache: "no-store",
       });
-      throw new Error(`Vegvesen API error: ${res.status}`);
+
+      if (res.status === 204 || res.status === 404) {
+        writeVehicleCache(cleaned, null);
+        return null;
+      }
+
+      if (!res.ok) {
+        const bodyPreview = await readErrorResponse(res);
+        logVegvesenEvent("upstream_request_failed", {
+          regnr: cleaned,
+          url,
+          status: res.status,
+          statusText: res.statusText,
+          retryAfter: res.headers.get("retry-after"),
+          requestId: res.headers.get("x-request-id") ?? res.headers.get("traceparent"),
+          contentType: res.headers.get("content-type"),
+          durationMs: Date.now() - startedAt,
+          keyIndex: index,
+          keyCount: SVV_API_KEYS.length,
+          bodyPreview,
+        });
+
+        if (index < SVV_API_KEYS.length - 1) {
+          continue;
+        }
+
+        throw new Error(`Vegvesen API error: ${res.status}`);
+      }
+
+      const data: VegvesenResponse = await res.json();
+
+      if (!data.kjoretoydataListe || data.kjoretoydataListe.length === 0) {
+        writeVehicleCache(cleaned, null);
+        return null;
+      }
+
+      const vehicle = data.kjoretoydataListe[0];
+      writeVehicleCache(cleaned, vehicle);
+      return vehicle;
     }
 
-    const data: VegvesenResponse = await res.json();
-
-    if (!data.kjoretoydataListe || data.kjoretoydataListe.length === 0) {
-      writeVehicleCache(cleaned, null);
-      return null;
-    }
-
-    const vehicle = data.kjoretoydataListe[0];
-    writeVehicleCache(cleaned, vehicle);
-    return vehicle;
+    throw new Error("Vegvesen API request failed");
   })();
 
   inFlightRequests.set(cleaned, request);

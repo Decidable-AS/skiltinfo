@@ -8,7 +8,8 @@
  * Resumable — caches scan results in src/data/plate-ranges.json.
  *
  * Usage: bun run scripts/scan-plate-ranges.ts
- * Requires SVV_API_KEY in .env.local
+ * Requires SVV_API_KEY in .env.local. Multiple keys can be provided as a
+ * comma-separated list.
  */
 
 import { readFileSync, writeFileSync, existsSync } from "fs";
@@ -32,8 +33,12 @@ function envVar(name: string): string | undefined {
   return match?.[1]?.trim().replace(/^["']|["']$/g, "");
 }
 
-const API_KEY = envVar("SVV_API_KEY");
-if (!API_KEY) {
+const API_KEYS = (envVar("SVV_API_KEY") ?? "")
+  .split(",")
+  .map((key) => key.trim())
+  .filter(Boolean);
+
+if (API_KEYS.length === 0) {
   console.error("SVV_API_KEY not found");
   process.exit(1);
 }
@@ -52,15 +57,22 @@ let requestCount = 0;
 async function checkPlate(regnr: string): Promise<boolean> {
   requestCount++;
   try {
-    const res = await fetch(`${API_BASE}?kjennemerke=${regnr}`, {
-      headers: { "SVV-Authorization": `Apikey ${API_KEY}` },
-    });
-    if (res.status === 200) return true;
-    if (res.status === 204 || res.status === 404) return false;
-    if (res.status === 429 || res.status >= 500) {
-      await sleep(3000);
-      return checkPlate(regnr);
+    for (let index = 0; index < API_KEYS.length; index++) {
+      const res = await fetch(`${API_BASE}?kjennemerke=${regnr}`, {
+        headers: { "SVV-Authorization": `Apikey ${API_KEYS[index]}` },
+      });
+      if (res.status === 200) return true;
+      if (res.status === 204 || res.status === 404) return false;
+      if (index < API_KEYS.length - 1) {
+        continue;
+      }
+      if (res.status === 429 || res.status >= 500) {
+        await sleep(3000);
+        return checkPlate(regnr);
+      }
+      return false;
     }
+
     return false;
   } catch {
     await sleep(2000);
