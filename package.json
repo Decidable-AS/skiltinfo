@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "scan-sitemaps": "bun run scripts/scan-plate-ranges.ts",
     "build-sitemaps": "bun run scripts/build-sitemaps.ts",
     "build": "bun run build-sitemaps && next build",
     "start": "next start",

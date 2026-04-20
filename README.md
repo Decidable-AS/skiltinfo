@@ -20,6 +20,13 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Sitemaps
+
+- `bun run scan-sitemaps` scans the Vegvesen API locally and updates `src/data/plate-ranges.json`.
+- Commit `src/data/plate-ranges.json` after refreshing it.
+- `bun run build-sitemaps` only generates sitemap XML from the cached `src/data/plate-ranges.json` file.
+- `bun run build` does not scan the API during deploys; it only builds sitemap files from the committed cache.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

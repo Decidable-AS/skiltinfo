@@ -1,18 +1,13 @@
 /**
- * Scan the Vegvesen API to find active plate ranges, then generate
- * all sitemap XML files into public/.
+ * Generate all sitemap XML files into public/ from cached plate ranges.
  *
  * Output:
  *   public/sitemap.xml            — sitemap index
  *   public/sitemaps/0.xml .. N.xml — child sitemaps (max 50k URLs each)
  *
- * Assumption: plates are assigned sequentially from 10000 (5-digit) or
- * 1000 (4-digit). If the first number doesn't exist, the prefix is empty.
- *
- * Resumable — caches scan results in src/data/plate-ranges.json.
+ * Reads src/data/plate-ranges.json and does not call the Vegvesen API.
  *
  * Usage: bun run scripts/build-sitemaps.ts
- * Requires SVV_API_KEY in .env.local
  */
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync, rmSync } from "fs";
@@ -21,11 +16,6 @@ import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
-
-const API_BASE =
-  "https://www.vegvesen.no/ws/no/vegvesen/kjoretoy/felles/datautlevering/enkeltoppslag/kjoretoydata";
-
-const VALID_LETTERS = "ABCDEFGHJKLNPRSTUVWXYZ".split("");
 
 // Load env: process.env takes priority (set by Coolify/CI), fall back to .env.local
 const envPath = resolve(ROOT, ".env.local");
@@ -37,12 +27,6 @@ function envVar(name: string): string | undefined {
   return match?.[1]?.trim().replace(/^["']|["']$/g, "");
 }
 
-const API_KEY = envVar("SVV_API_KEY");
-if (!API_KEY) {
-  console.error("SVV_API_KEY not found");
-  process.exit(1);
-}
-
 // COOLIFY_URL is comma-separated, e.g. "https://bilskiltnummer.no,https://www.bilskiltnummer.no"
 const coolifyUrl = envVar("COOLIFY_URL");
 const BASE_URL = coolifyUrl?.split(",")[0] ?? "http://localhost:3000";
@@ -51,8 +35,6 @@ const CACHE_PATH = resolve(ROOT, "src/data/plate-ranges.json");
 const SITEMAPS_DIR = resolve(ROOT, "public/sitemaps");
 const INDEX_PATH = resolve(ROOT, "public/sitemap.xml");
 const MAX_URLS_PER_SITEMAP = 50_000;
-const CONCURRENCY = 10;
-const DELAY_MS = 30;
 const URL_CHANGEFREQ = "daily";
 const URL_PRIORITY = "0.8";
 
@@ -60,77 +42,10 @@ const URL_PRIORITY = "0.8";
 
 interface NumRange { min: number; max: number }
 interface PrefixResult { d5?: NumRange; d4?: NumRange }
-type ScanResult = PrefixResult | "empty";
-type ScanCache = Record<string, ScanResult>;
-
-// ── API ────────────────────────────────────────────────────────────────
-
-let requestCount = 0;
-
-async function checkPlate(regnr: string): Promise<boolean> {
-  requestCount++;
-  try {
-    const res = await fetch(`${API_BASE}?kjennemerke=${regnr}`, {
-      headers: { "SVV-Authorization": `Apikey ${API_KEY}` },
-    });
-    if (res.status === 200) return true;
-    if (res.status === 204 || res.status === 404) return false;
-    if (res.status === 429 || res.status >= 500) {
-      await sleep(3000);
-      return checkPlate(regnr);
-    }
-    return false;
-  } catch {
-    await sleep(2000);
-    return checkPlate(regnr);
-  }
-}
-
-function sleep(ms: number): Promise<void> {
-  return new Promise((r) => setTimeout(r, ms));
-}
+type ScanCache = Record<string, PrefixResult>;
 
 function pad(n: number, d: number): string {
   return String(n).padStart(d, "0");
-}
-
-// ── Binary search ──────────────────────────────────────────────────────
-
-async function bsearchMax(prefix: string, lo: number, hi: number, digits: number): Promise<number> {
-  let left = lo, right = hi, best = lo;
-  while (left <= right) {
-    const mid = Math.ceil((left + right) / 2);
-    if (await checkPlate(`${prefix}${pad(mid, digits)}`)) { best = mid; left = mid + 1; }
-    else right = mid - 1;
-    await sleep(DELAY_MS);
-  }
-  return best;
-}
-
-async function findMax(prefix: string, min: number, max: number, digits: number): Promise<number | null> {
-  if (!(await checkPlate(`${prefix}${pad(min, digits)}`))) return null;
-  await sleep(DELAY_MS);
-  return bsearchMax(prefix, min, max, digits);
-}
-
-async function scanPrefix(prefix: string): Promise<ScanResult> {
-  const [max5, max4] = await Promise.all([
-    findMax(prefix, 10000, 99999, 5),
-    findMax(prefix, 1000, 9999, 4),
-  ]);
-  if (max5 === null && max4 === null) return "empty";
-  const r: PrefixResult = {};
-  if (max5 !== null) r.d5 = { min: 10000, max: max5 };
-  if (max4 !== null) r.d4 = { min: 1000, max: max4 };
-  return r;
-}
-
-// ── Concurrency pool ───────────────────────────────────────────────────
-
-async function pooled<T>(items: T[], concurrency: number, fn: (item: T) => Promise<void>) {
-  let idx = 0;
-  const worker = async () => { while (idx < items.length) { const i = idx++; await fn(items[i]); } };
-  await Promise.all(Array.from({ length: concurrency }, () => worker()));
 }
 
 // ── XML helpers ────────────────────────────────────────────────────────
@@ -148,34 +63,21 @@ function writeSitemapChunk(filepath: string, urls: string[]) {
 // ── Main ───────────────────────────────────────────────────────────────
 
 async function main() {
-  const prefixes: string[] = [];
-  for (const a of VALID_LETTERS) for (const b of VALID_LETTERS) prefixes.push(`${a}${b}`);
-
-  // 1. Scan (with cache)
-  let cache: ScanCache = {};
-  if (existsSync(CACHE_PATH)) {
-    try { cache = JSON.parse(readFileSync(CACHE_PATH, "utf-8")); } catch { cache = {}; }
+  if (!existsSync(CACHE_PATH)) {
+    console.error(`Cache file not found: ${CACHE_PATH}`);
+    console.error("Run the scan script locally to generate plate-ranges.json before building sitemaps.");
+    process.exit(1);
   }
 
-  const cached = Object.keys(cache).length;
-  console.log(`Scanning ${prefixes.length} prefixes (${cached} cached, concurrency ${CONCURRENCY})`);
+  let ranges: ScanCache;
+  try {
+    ranges = JSON.parse(readFileSync(CACHE_PATH, "utf-8"));
+  } catch {
+    console.error(`Failed to read cache file: ${CACHE_PATH}`);
+    process.exit(1);
+  }
 
-  let done = cached;
-  await pooled(prefixes, CONCURRENCY, async (prefix) => {
-    if (cache[prefix] !== undefined) return;
-    const result = await scanPrefix(prefix);
-    cache[prefix] = result;
-    done++;
-    const tag = result === "empty" ? "empty" : Object.entries(result).map(([k, v]) => `${k}:${v.max}`).join(" ");
-    console.log(`[${done}/${prefixes.length}] ${prefix} ${tag}`);
-    writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 2));
-  });
-
-  const ranges: Record<string, PrefixResult> = {};
-  for (const [k, v] of Object.entries(cache)) if (v !== "empty") ranges[k] = v;
-  writeFileSync(CACHE_PATH, JSON.stringify(ranges, null, 2));
-
-  // 2. Generate sitemap XMLs
+  // 1. Generate sitemap XMLs
   console.log("Generating sitemaps...");
 
   if (existsSync(SITEMAPS_DIR)) rmSync(SITEMAPS_DIR, { recursive: true });
@@ -213,7 +115,7 @@ async function main() {
     }
   }
 
-  // 3. Write sitemap index
+  // 2. Write sitemap index
   let indexXml = '<?xml version="1.0" encoding="UTF-8"?>\n';
   indexXml += '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
   for (const file of sitemapFiles) {
@@ -222,7 +124,7 @@ async function main() {
   indexXml += "</sitemapindex>\n";
   writeFileSync(INDEX_PATH, indexXml);
 
-  console.log(`Done: ${Object.keys(ranges).length} active prefixes, ${sitemapFiles.length} sitemaps, ${totalUrls.toLocaleString()} URLs, ${requestCount} API calls`);
+  console.log(`Done: ${Object.keys(ranges).length} active prefixes, ${sitemapFiles.length} sitemaps, ${totalUrls.toLocaleString()} URLs`);
 }
 
 main().catch(console.error);
