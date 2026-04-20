@@ -47,7 +47,7 @@ export default function Home() {
                   Søk opp kjøretøyinformasjon
                 </p>
                 <p className="font-mono text-xs text-slate-400">
-                  Skriv inn registreringsnummer for å starte
+                  Skriv inn registreringsnummer for å starte, og få også eierinformasjon
                 </p>
               </div>
 
@@ -92,7 +92,7 @@ export default function Home() {
                   {[
                     { label: "Teknisk info", desc: "Motor, vekt, mål" },
                     { label: "Miljødata", desc: "Utslipp, forbruk" },
-                    { label: "EU-kontroll", desc: "Frist, status" },
+                    { label: "Eierinfo", desc: "Finn registrert eier" },
                   ].map((item) => (
                     <div key={item.label}>
                       <div className="font-mono text-xs font-bold text-slate-700">{item.label}</div>
