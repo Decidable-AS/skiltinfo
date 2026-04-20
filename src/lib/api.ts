@@ -12,7 +12,7 @@ export async function fetchVehicle(
     headers: {
       "SVV-Authorization": `Apikey ${process.env.SVV_API_KEY}`,
     },
-    next: { revalidate: 3600 },
+    cache: "no-store",
   });
 
   if (res.status === 204 || res.status === 404) {
