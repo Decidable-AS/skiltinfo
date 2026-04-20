@@ -165,6 +165,16 @@ export default async function VehiclePage({ params }: PageProps) {
               )}
 
               {/* Sections */}
+              <div className="mb-6 rounded-sm border-2 border-dashed border-sky-300 bg-sky-50 px-4 py-3 text-center">
+                <a
+                  href="https://digitalskademelding.no"
+                  className="font-mono text-sm font-bold text-sky-800 underline decoration-sky-400 underline-offset-2 hover:text-sky-900"
+                >
+                  <span className="block">Har du kollidert eller vært i en ulykke med denne bilen?</span>
+                  <span className="block">Fyll ut skademelding digitalt her!</span>
+                </a>
+              </div>
+
               <FormSection num="01" title="Registrering">
                 <DotRow label="Registreringsnr" value={v.plate} />
                 <DotRow label="Understellsnr" value={v.understellsnummer} />
