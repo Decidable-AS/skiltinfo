@@ -28,7 +28,7 @@ export default function GlobalErrorPage({ error, reset }: GlobalErrorPageProps) 
     <html lang="nb">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ErrorScreen
-          title="Skiltinfo er midlertidig utilgjengelig"
+          title="Bilskiltnummer er midlertidig utilgjengelig"
           message="Applikasjonen traff en uventet feil før siden kunne vises."
           details="Prøv igjen om litt. Hvis feilen fortsetter, jobber vi sannsynligvis allerede med saken."
           onReset={reset}

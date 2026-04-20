@@ -17,7 +17,7 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
     <ErrorScreen
       title="Kunne ikke laste siden"
       message="Det oppstod en feil mens vi hentet informasjonen du ba om."
-      details="Prøv å laste siden på nytt. Hvis problemet vedvarer, kan tjenesten hos Statens vegvesen eller Skiltinfo være midlertidig utilgjengelig."
+      details="Prøv å laste siden på nytt. Hvis problemet vedvarer, kan tjenesten hos Statens vegvesen eller Bilskiltnummer være midlertidig utilgjengelig."
       onReset={reset}
     />
   );

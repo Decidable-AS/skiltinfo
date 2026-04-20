@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Skiltinfo - Kjøretøyinformasjon for norske kjøretøy",
+    default: "Bilskiltnummer - Kjøretøyinformasjon for norske kjøretøy",
     template: "%s",
   },
   description:
@@ -29,19 +29,19 @@ export const metadata: Metadata = {
     "kjøretøydata",
     "bilinfo",
     "norske biler",
-    "skiltinfo",
+    "bilskiltnummer",
   ],
   openGraph: {
     type: "website",
     locale: "nb_NO",
-    siteName: "Skiltinfo",
-    title: "Skiltinfo - Kjøretøyinformasjon for norske kjøretøy",
+    siteName: "Bilskiltnummer",
+    title: "Bilskiltnummer - Kjøretøyinformasjon for norske kjøretøy",
     description:
       "Søk opp detaljert kjøretøyinformasjon med registreringsnummer. Tekniske data, motor, vekt, EU-kontroll, utslipp og mer.",
   },
   twitter: {
     card: "summary",
-    title: "Skiltinfo - Kjøretøyinformasjon for norske kjøretøy",
+    title: "Bilskiltnummer - Kjøretøyinformasjon for norske kjøretøy",
     description:
       "Søk opp detaljert kjøretøyinformasjon med registreringsnummer.",
   },

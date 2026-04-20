@@ -11,7 +11,7 @@ export default function NotFound() {
               <Link href="/" className="text-sm font-bold text-white hover:text-slate-300 transition-colors tracking-wider uppercase">
                 Nytt søk
               </Link>
-              <div className="text-lg font-bold tracking-wider">SKILTINFO</div>
+              <div className="text-lg font-bold tracking-wider">BILSKILTNUMMER</div>
               <div className="text-xs invisible">Nytt søk</div>
             </div>
           </div>
@@ -43,7 +43,7 @@ export default function NotFound() {
 
           <div className="border-t-2 border-dashed border-slate-300" />
           <div className="px-6 py-3 text-center font-mono text-[10px] text-slate-400 uppercase tracking-wider">
-            Data fra Statens vegvesen &bull; Skiltinfo er uavhengig
+            Data fra Statens vegvesen &bull; Bilskiltnummer er uavhengig
           </div>
         </div>
       </div>

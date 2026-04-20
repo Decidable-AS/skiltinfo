@@ -34,7 +34,7 @@ export default function Home() {
           <div className="bg-white rounded shadow-lg shadow-slate-300/40 border border-slate-200 overflow-hidden">
             {/* Header strip */}
             <div className="bg-slate-800 text-white px-6 py-4 font-mono text-center">
-              <div className="text-lg font-bold tracking-wider">SKILTINFO</div>
+              <div className="text-lg font-bold tracking-wider">BILSKILTNUMMER</div>
             </div>
 
             {/* Perforated edge */}
@@ -106,7 +106,7 @@ export default function Home() {
             {/* Footer strip */}
             <div className="border-t-2 border-dashed border-slate-300" />
             <div className="px-6 py-3 text-center font-mono text-[10px] text-slate-400 uppercase tracking-wider">
-              Data fra Statens vegvesen &bull; Skiltinfo er uavhengig
+              Data fra Statens vegvesen &bull; Bilskiltnummer er uavhengig
             </div>
           </div>
         </div>

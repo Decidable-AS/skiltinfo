@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const merke = tech?.generelt?.merke?.[0]?.merke || "";
   const modell = tech?.generelt?.handelsbetegnelse?.[0] || "";
   const year = vehicle.forstegangsregistrering?.registrertForstegangNorgeDato?.slice(0, 4) || "";
-  const title = `${plate} - ${merke} ${modell} ${year} | Skiltinfo`;
+  const title = `${plate} - ${merke} ${modell} ${year} | Bilskiltnummer`;
   const description = `Se all informasjon om ${merke} ${modell} (${year}) med registreringsnummer ${plate}. Motor, vekt, dekk, EU-kontroll, utslipp og mer.`;
 
   return {
@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       type: "website",
-      siteName: "Skiltinfo",
+      siteName: "Bilskiltnummer",
       url: canonical,
     },
     twitter: { card: "summary", title, description },
@@ -106,7 +106,7 @@ export default async function VehiclePage({ params }: PageProps) {
                 <Link href="/" className="text-sm font-bold text-white hover:text-slate-300 transition-colors tracking-wider uppercase">
                   Nytt søk
                 </Link>
-                <div className="text-lg font-bold tracking-wider">SKILTINFO</div>
+                <div className="text-lg font-bold tracking-wider">BILSKILTNUMMER</div>
                 <div className="text-xs invisible">Nytt søk</div>
               </div>
             </div>
@@ -263,7 +263,7 @@ export default async function VehiclePage({ params }: PageProps) {
                 Nytt søk
               </Link>
               <div className="mt-3 text-center font-mono text-[10px] text-slate-400 uppercase tracking-wider">
-                Data fra Statens vegvesen &bull; Skiltinfo er uavhengig
+                Data fra Statens vegvesen &bull; Bilskiltnummer er uavhengig
               </div>
             </div>
           </div>
