@@ -74,6 +74,9 @@ export default async function VehiclePage({ params }: PageProps) {
   const v = await getVehicleView(regnr);
   if (!v) notFound();
 
+  const ownerLookupMessage = `REGNR ${v.plate.replace(/\s+/g, "")}`;
+  const ownerLookupHref = `sms:2282?body=${encodeURIComponent(ownerLookupMessage)}`;
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Vehicle",
@@ -175,6 +178,20 @@ export default async function VehiclePage({ params }: PageProps) {
                   <span className="block">Har du kollidert eller vært i en ulykke med denne bilen?</span>
                   <span className="block">Fyll ut skademelding digitalt her!</span>
                 </a>
+              </div>
+
+              <div className="mb-8 rounded-sm border-2 border-dashed border-slate-300 px-4 py-4 text-center">
+                <a
+                  href={ownerLookupHref}
+                  data-umami-event="find-owner-click"
+                  data-umami-event-plate={v.plate}
+                  className="inline-block w-full bg-slate-800 text-white font-mono text-sm font-bold uppercase tracking-wider px-6 py-3 rounded-sm hover:bg-slate-700 transition-colors"
+                >
+                  Finn eier
+                </a>
+                <p className="mt-3 font-mono text-[10px] text-slate-400 uppercase tracking-wider">
+                  Tjenesten koster 3kr
+                </p>
               </div>
 
               <FormSection num="01" title="Registrering">
