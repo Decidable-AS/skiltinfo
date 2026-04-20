@@ -1,9 +1,10 @@
+import { cache } from "react";
 import { VegvesenResponse, KjoretoyData } from "./types";
 
 const API_BASE =
   "https://www.vegvesen.no/ws/no/vegvesen/kjoretoy/felles/datautlevering/enkeltoppslag/kjoretoydata";
 
-export async function fetchVehicle(
+async function fetchVehicleUncached(
   regnr: string
 ): Promise<KjoretoyData | null> {
   const cleaned = regnr.toUpperCase().replace(/[\s-]/g, "");
@@ -31,3 +32,6 @@ export async function fetchVehicle(
 
   return data.kjoretoydataListe[0];
 }
+
+// Share the same lookup between metadata and page rendering for a request.
+export const fetchVehicle = cache(fetchVehicleUncached);
