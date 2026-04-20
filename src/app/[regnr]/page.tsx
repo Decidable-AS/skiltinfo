@@ -168,18 +168,6 @@ export default async function VehiclePage({ params }: PageProps) {
               )}
 
               {/* Sections */}
-              <div className="mb-6 rounded-sm border-2 border-dashed border-sky-300 bg-sky-50 px-4 py-3 text-center">
-                <a
-                  href="https://digitalskademelding.no"
-                  target="_blank"
-                  rel="noopener"
-                  className="font-mono text-sm font-bold text-sky-800 underline decoration-sky-400 underline-offset-2 hover:text-sky-900"
-                >
-                  <span className="block">Har du kollidert eller vært i en ulykke med denne bilen?</span>
-                  <span className="block">Fyll ut skademelding digitalt her!</span>
-                </a>
-              </div>
-
               <div className="mb-8 rounded-sm border-2 border-dashed border-slate-300 px-4 py-4 text-center">
                 <a
                   href={ownerLookupHref}
@@ -192,6 +180,18 @@ export default async function VehiclePage({ params }: PageProps) {
                 <p className="mt-3 font-mono text-[10px] text-slate-400 uppercase tracking-wider">
                   Tjenesten koster 3kr
                 </p>
+              </div>
+
+              <div className="mb-6 rounded-sm border-2 border-dashed border-sky-300 bg-sky-50 px-4 py-3 text-center">
+                <a
+                  href="https://digitalskademelding.no"
+                  target="_blank"
+                  rel="noopener"
+                  className="font-mono text-sm font-bold text-sky-800 underline decoration-sky-400 underline-offset-2 hover:text-sky-900"
+                >
+                  <span className="block">Har du kollidert eller vært i en ulykke med denne bilen?</span>
+                  <span className="block">Fyll ut skademelding digitalt her!</span>
+                </a>
               </div>
 
               <FormSection num="01" title="Registrering">
